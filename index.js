@@ -39,15 +39,20 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
-
-
-
-
-
-
+Person.prototype.eat = function(food){
+  this.stomach.push(food);
+}
+Person.prototype.poop = function(){
+  this.stomach = [];
+}
+Person.prototype.toString = function(){
+  return `${this.name}, ${this.age}`;
+}
 
 /*
   TASK 2
@@ -63,10 +68,22 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
-
+Car.prototype.fill = function(gallons){
+  this.tank+=gallons;
+}
+Car.prototype.drive = function(distance){
+  let ranOut = this.tank<(distance*this.milesPerGallon);
+  if(ranOut) distance = this.tank/this.milesPerGallon;
+  this.odometer+=distance;
+  this.tank-=(distance*milesPerGallon);
+  if(ranOut) return `I ran out of fuel at ${this.odometer} miles!`;
+}
 
 /*
   TASK 3
@@ -75,20 +92,24 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
-}
 
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
+}
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`;
+}
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Window Binding: if "this" is used in the global space, it returns the window unless "use strict" is in use in which case, this is undefined.
+  2. Implicit Binding: If a method is called, "this" refers to the object to the left of the dot.
+  3. Explicit Binding: If a function is called using .call() or a similar method, "this" refers to the object stated as the first parameter.
+  4. New Binding: If a constructor is called with "new", "this" refers to the brand new object.
 */
-
 
 ///////// END OF CHALLENGE /////////
 
